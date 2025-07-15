@@ -1,52 +1,27 @@
-# Yelp-Business-Review-Analysis
-# Yelp Business Reviews Analysis — End to End Data Analytics Project
+# 📊 Yelp Business Reviews Analysis | End-to-End Data Analytics Project (Cloud + SQL + Python)
 
-## Project Overview
-This project demonstrates a complete data analytics workflow using Yelp business reviews data. The project covers data cleaning, exploratory data analysis (EDA), sentiment analysis, and visualization to extract insights from customer reviews and business performance.
+This project is an end-to-end data analytics pipeline using Yelp's open dataset (~5GB), covering cloud storage, data warehousing, JSON processing, sentiment analysis, and SQL-based business insights.
 
-> **Note:** The dataset used is publicly available and for educational purposes.
+## 🔧 Tech Stack
 
----
+- **Python**: Data preprocessing, file splitting, sentiment analysis
+- **Amazon S3**: Cloud storage for staging raw JSON data
+- **Snowflake**: Data warehousing and SQL analytics
+- **SQL**: Data flattening, transformation, and business queries
 
-## Key Business Questions Addressed
-- What are the overall sentiment trends in Yelp reviews?
-- Which business categories have the highest ratings?
-- How do review sentiments vary by location?
-- What common themes emerge from customer reviews?
-- Are there seasonal trends in reviews and ratings?
+## 📁 Project Structure
 
----
-
-## Tools and Libraries Used
-- Python 3.x
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- NLTK or TextBlob (for sentiment analysis)
-- WordCloud
-
----
-
-## Project Steps
-
-### 1. Data Collection & Cleaning
-- Load Yelp business and review datasets.
-- Handle missing data and preprocess text for analysis.
-
-### 2. Exploratory Data Analysis (EDA)
-- Analyze rating distributions.
-- Examine review counts by business category and location.
-- Identify patterns in review length and frequency.
-
-### 3. Sentiment Analysis
-- Perform sentiment scoring on review texts.
-- Visualize sentiment distributions.
-- Extract common positive and negative words using word clouds.
-
-### 4. Visualization & Reporting
-- Create plots to summarize findings.
-- Provide actionable business insights based on analysis.
-
----
-
+```bash
+├── data/
+│   └── yelp_reviews_split/        # Chunked JSON files (~500MB each)
+├── python/
+│   ├── split_yelp_json.py         # Script to split raw Yelp JSON data
+│   └── sentiment_udf.py           # Python UDF for sentiment tagging
+├── snowflake/
+│   ├── create_stage.sql           # S3 → Snowflake external stage creation
+│   ├── copy_into_table.sql        # Copy command to load JSON into Snowflake
+│   ├── flatten_json.sql           # Parse nested JSON into relational schema
+│   ├── create_sentiment_udf.sql   # Python UDF in Snowflake
+│   └── analytics_queries.sql      # Business insights using SQL
+├── screenshots/                   # Visuals of Snowflake schema & query results
+└── README.md                      # This file
