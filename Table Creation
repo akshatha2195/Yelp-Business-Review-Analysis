@@ -41,3 +41,57 @@ FILE_FORMAT=(TYPE=JSON);
 
 SELECT * from yelp_reviews limit 100 
 SELECT * from yelp_business limit 100 
+
+create table reviews (review varchar(200));
+
+insert into reviews values('I love this product! It works Perfectly');
+insert into reviews values('This product is okay ,it could have been better.');
+insert into reviews values('I hate this product! It stopped working after a week.');
+insert into reviews values('This product is okay! Not that great.');
+insert into reviews values('This product is not good! But I can use.');
+
+select * from reviews
+
+CREATE OR REPLACE FUNCTION analyze_sentiment(text STRING)
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+PACKAGES = ('textblob') 
+HANDLER = 'sentiment_analyzer'
+AS $$
+from textblob import TextBlob
+def sentiment_analyzer(text):
+    analysis = TextBlob(text)
+    
+    if analysis.sentiment.polarity > 0:
+        return 'Positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'Neutral'
+    else:
+        return 'Negative'
+$$;      
+
+select review,analyze_sentiment(review) from reviews 
+
+create or replace table tbl_Yelp_reviews as 
+select review_text:business_id::string as business_id,
+review_text:date::date as review_date,
+review_text:user_id::string as user_id,
+review_text:stars::number as review_stars,
+review_text:text::string as review_text,
+analyze_sentiment(review_text) as sentiments
+from yelp_reviews     
+
+select *from tbl_Yelp_reviews limit 5
+
+create  or replace  table tbl_yelp_business as 
+select business_text:business_id::string as business_id ,
+business_text:name::string as bname,
+business_text:city::string as city,
+business_text:state::string as state,
+business_text:review_count::string as review_count,
+business_text:stars::number as stars,
+business_text:categories::string as categories
+ from yelp_business 
+
+ select count(*) from tbl_yelp_business
