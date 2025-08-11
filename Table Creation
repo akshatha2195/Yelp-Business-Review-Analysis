@@ -1,0 +1,30 @@
+create or replace table yelp_reviews(reviews_text variant)
+COPY INTO
+yelp_reviews
+FROM
+'s3://hellosqls3/Yelp Analysis/'
+CREDENTIALS
+=(
+AWS_KEY_ID=''
+AWS_SECRET_KEY=''
+
+)
+FILE_FORMAT=(TYPE=JSON);
+
+create or replace table yelp_business(business_text variant)
+
+COPY INTO
+YELP_BUSINESS
+FROM
+'s3://hellosqls3/Yelp Analysis/yelp_academic_dataset_business.json'
+CREDENTIALS
+=(
+AWS_KEY_ID=''
+AWS_SECRET_KEY=''
+
+)
+FILE_FORMAT=(TYPE=JSON);
+
+
+SELECT * from yelp_reviews limit 100 
+SELECT * from yelp_business limit 100 
